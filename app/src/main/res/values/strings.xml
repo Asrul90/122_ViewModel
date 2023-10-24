@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Kotlin1</string>
+    <string name="laki">Laki-Laki</string>
+    <string name="wanita">Perempuan</string>
+    <string name="sex">Jenis</string>
+    <string name="submit">Submit</string>
+</resources>
