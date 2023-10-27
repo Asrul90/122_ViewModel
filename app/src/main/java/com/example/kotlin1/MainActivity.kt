@@ -244,7 +244,8 @@ fun SelectStatus(
     onStatusSelectionChanged: (String) -> Unit = {}
 ) {
     var selectedStatus by rememberSaveable { mutableStateOf("") }
-    Text("Status:")
+    Text(modifier = Modifier.fillMaxWidth(),
+        text = "Status:")
 
     Row(modifier = Modifier.fillMaxWidth()) {
         options.forEach { item ->
