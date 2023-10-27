@@ -98,7 +98,7 @@ fun SelectJK(
 ){
     var selectedValue by rememberSaveable { mutableStateOf("")}
 
-    Row(modifier = Modifier.padding(16.dp)) {
+    Row(modifier = Modifier.fillMaxWidth()) {
         options.forEach { item ->
             Row(
                 modifier = Modifier.selectable(
@@ -200,7 +200,9 @@ fun TampilForm(cobaViewModel: CobaViewModel = viewModel()){
             textEmail = it
         }
     )
-    Text("Jenis Kelamin:")
+
+    Text(modifier = Modifier.fillMaxWidth(),
+        text = "Jenis Kelamin:")
 
     SelectJK(
         options = jenis.map {id -> context.resources.getString(id)},
@@ -244,7 +246,7 @@ fun SelectStatus(
     var selectedStatus by rememberSaveable { mutableStateOf("") }
     Text("Status:")
 
-    Row(modifier = Modifier.padding(16.dp)) {
+    Row(modifier = Modifier.fillMaxWidth()) {
         options.forEach { item ->
             Row(
                 modifier = Modifier.selectable(
