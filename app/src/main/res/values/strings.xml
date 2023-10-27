@@ -3,5 +3,6 @@
     <string name="laki">Laki-Laki</string>
     <string name="wanita">Perempuan</string>
     <string name="sex">Jenis</string>
-    <string name="submit">Submit</string>
+    <string name="status">Status</string>
+    <string name="submit">Registrasi</string>
 </resources>

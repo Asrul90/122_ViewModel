@@ -1,5 +1,6 @@
 package com.example.kotlin1
 
+import android.provider.ContactsContract.CommonDataKinds.Email
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -17,15 +18,18 @@ class CobaViewModel : ViewModel (){
         private set
     var Alamatt: String by mutableStateOf("")
         private set
+    var Email: String by mutableStateOf("")
+        private set
     var jenisKl: String by mutableStateOf("")
         private set
     private val _uiState = MutableStateFlow(DataForm())
     val uiState: StateFlow<DataForm> = _uiState.asStateFlow()
 
-    fun insertData(nm: String, tlp: String,almt: String, jk: String) {
+    fun insertData(nm: String, tlp: String,almt: String,mail: String, jk: String) {
         namaUSR=nm;
         noTlp=tlp;
         Alamatt=almt;
+        Email=mail;
         jenisKl=jk;
 
     }
@@ -33,4 +37,9 @@ class CobaViewModel : ViewModel (){
         _uiState.update { currentState -> currentState.copy(sex = pilihJK)
             }
         }
+
+    fun setStatusNikah(pilihStatus:String){
+        _uiState.update { currentState -> currentState.copy(sex = pilihStatus)
+        }
+    }
 }

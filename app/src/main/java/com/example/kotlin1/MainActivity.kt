@@ -4,7 +4,9 @@ import android.os.Bundle
 import android.widget.Button
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -15,16 +17,20 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -37,6 +43,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.modifier.modifierLocalMapOf
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
@@ -66,6 +73,7 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun TampilLayout(modifier: Modifier = Modifier){
+
     Card(
         modifier = modifier,
         elevation = CardDefaults.cardElevation(defaultElevation = 5.dp)
@@ -80,33 +88,7 @@ fun TampilLayout(modifier: Modifier = Modifier){
     }
 }
 
-@Composable
-fun TextHasil(namanya: String,telponnya: String, jenisnya: String, alamatnya: String){
-    ElevatedCard (
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = 6.dp
-        ),
-        modifier = Modifier
-            .fillMaxWidth()
-    ){
-        Text(
-            text = "Nama : " + namanya,
-            modifier = Modifier
-                .padding(horizontal = 10.dp, vertical = 4.dp))
-        Text(
-            text = "Telepon : " + telponnya,
-            modifier = Modifier
-                .padding(horizontal = 10.dp, vertical = 5.dp))
-        Text(
-            text = "Alamat : " + alamatnya,
-            modifier = Modifier
-                .padding(horizontal = 10.dp, vertical = 4.dp))
-        Text(
-            text = "jenis Kelamin : " + jenisnya,
-            modifier = Modifier
-                .padding(horizontal = 10.dp, vertical = 5.dp))
-    }
-}
+
 
 @Composable
 fun SelectJK(
@@ -116,6 +98,7 @@ fun SelectJK(
     var selectedValue by rememberSaveable { mutableStateOf("")}
 
     Column(modifier = Modifier.padding(16.dp)) {
+        Text("Jenis Kelamin:")
         options.forEach { item ->
             Row(
                 modifier = Modifier.selectable(
@@ -141,17 +124,49 @@ fun SelectJK(
 
 
 
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TampilForm(cobaViewModel: CobaViewModel = viewModel()){
     var textNama by remember { mutableStateOf("") }
     var textTlp by remember { mutableStateOf("") }
     var textAlamat by remember { mutableStateOf("") }
+    var textEmail by remember { mutableStateOf("") }
 
     val context = LocalContext.current
     val  dataForm: DataForm
     val uiState by cobaViewModel.uiState.collectAsState()
     dataForm = uiState;
+
+    Row {
+        Image(
+            painter = painterResource(id = R.drawable.baseline_arrow_back_24),
+            contentDescription = "",
+            modifier = Modifier.size(20.dp)
+        )
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.SpaceBetween,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+
+
+            Column(
+                verticalArrangement = Arrangement.spacedBy(5.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(text = "Registrasi")
+            }
+
+            Column(
+                verticalArrangement = Arrangement.spacedBy(10.dp),
+            ) {
+                Text(text = "CreateAccount")
+            }
+        }
+    }
+
+
 
     OutlinedTextField(
         value = textNama,
@@ -175,6 +190,27 @@ fun TampilForm(cobaViewModel: CobaViewModel = viewModel()){
         }
     )
     OutlinedTextField(
+        value = textEmail,
+        singleLine = true,
+        shape = MaterialTheme.shapes.large,
+        modifier = Modifier.fillMaxWidth(),
+        label = { Text(text = "Email")},
+        onValueChange = {
+            textEmail = it
+        }
+    )
+
+    SelectJK(
+        options = jenis.map {id -> context.resources.getString(id)},
+        onSelectionChanged = { cobaViewModel.setJenisK(it)}
+    )
+
+    SelectStatus(
+        options = listOf("Sesudah", "Sebelum"),
+        onStatusSelectionChanged = { cobaViewModel.setStatusNikah(it) }
+    )
+
+    OutlinedTextField(
         value = textAlamat,
         singleLine = true,
         shape = MaterialTheme.shapes.large,
@@ -184,14 +220,10 @@ fun TampilForm(cobaViewModel: CobaViewModel = viewModel()){
             textAlamat = it
         }
     )
-    SelectJK(
-        options = jenis.map {id -> context.resources.getString(id)},
-        onSelectionChanged = { cobaViewModel.setJenisK(it)}
-    )
     Button(
         modifier = Modifier.fillMaxWidth(),
         onClick = {
-            cobaViewModel.insertData(textNama, textTlp, textAlamat, dataForm.sex)
+            cobaViewModel.insertData(textNama, textTlp, textAlamat,textEmail, dataForm.sex)
         }
     ) {
         Text(
@@ -199,13 +231,43 @@ fun TampilForm(cobaViewModel: CobaViewModel = viewModel()){
             fontSize = 16.sp
         )
     }
-    Spacer(modifier = Modifier.height(100.dp))
-    TextHasil(
-        namanya = cobaViewModel.namaUSR,
-        telponnya =cobaViewModel.noTlp,
-        alamatnya = cobaViewModel.Alamatt,
-        jenisnya = cobaViewModel.jenisKl )
+
 }
+
+@Composable
+fun SelectStatus(
+    options: List<String>,
+    onStatusSelectionChanged: (String) -> Unit = {}
+) {
+    var selectedStatus by rememberSaveable { mutableStateOf("") }
+
+    Column(modifier = Modifier.padding(16.dp)) {
+        Text("Status:")
+        options.forEach { item ->
+            Row(
+                modifier = Modifier.selectable(
+                    selected = selectedStatus == item,
+                    onClick = {
+                        selectedStatus = item
+                        onStatusSelectionChanged(item)
+                    }
+                ),
+                verticalAlignment = Alignment.CenterVertically
+            ){
+                RadioButton(
+                    selected = selectedStatus == item,
+                    onClick = {
+                        selectedStatus = item
+                        onStatusSelectionChanged(item)
+                    }
+                )
+                Text(item)
+            }
+        }
+    }
+}
+
+
 
 
 
