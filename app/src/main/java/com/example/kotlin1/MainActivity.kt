@@ -45,6 +45,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -97,8 +98,7 @@ fun SelectJK(
 ){
     var selectedValue by rememberSaveable { mutableStateOf("")}
 
-    Column(modifier = Modifier.padding(16.dp)) {
-        Text("Jenis Kelamin:")
+    Row(modifier = Modifier.padding(16.dp)) {
         options.forEach { item ->
             Row(
                 modifier = Modifier.selectable(
@@ -159,9 +159,10 @@ fun TampilForm(cobaViewModel: CobaViewModel = viewModel()){
             }
 
             Column(
-                verticalArrangement = Arrangement.spacedBy(10.dp),
+                verticalArrangement = Arrangement.spacedBy(20.dp),
             ) {
-                Text(text = "CreateAccount")
+                Text(text = "CreateAccount",
+                    fontWeight = FontWeight.Bold,)
             }
         }
     }
@@ -199,6 +200,7 @@ fun TampilForm(cobaViewModel: CobaViewModel = viewModel()){
             textEmail = it
         }
     )
+    Text("Jenis Kelamin:")
 
     SelectJK(
         options = jenis.map {id -> context.resources.getString(id)},
@@ -206,7 +208,7 @@ fun TampilForm(cobaViewModel: CobaViewModel = viewModel()){
     )
 
     SelectStatus(
-        options = listOf("Sesudah", "Sebelum"),
+        options = listOf("Belum Menikah", "Menikah"),
         onStatusSelectionChanged = { cobaViewModel.setStatusNikah(it) }
     )
 
@@ -240,9 +242,9 @@ fun SelectStatus(
     onStatusSelectionChanged: (String) -> Unit = {}
 ) {
     var selectedStatus by rememberSaveable { mutableStateOf("") }
+    Text("Status:")
 
-    Column(modifier = Modifier.padding(16.dp)) {
-        Text("Status:")
+    Row(modifier = Modifier.padding(16.dp)) {
         options.forEach { item ->
             Row(
                 modifier = Modifier.selectable(
